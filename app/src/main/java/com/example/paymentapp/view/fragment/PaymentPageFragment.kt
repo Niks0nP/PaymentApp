@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.paymentapp.R
-import com.example.paymentapp.data.repository.PaymentsRepository
 import com.example.paymentapp.databinding.PaymentsPageBinding
 import com.example.paymentapp.view.MyApp
+import com.example.paymentapp.view.adapter.PaymentsRecyclerAdapter
 import com.example.paymentapp.view.viewModel.ListPaymentsViewModel
 
 
@@ -17,10 +19,10 @@ class PaymentPageFragment : Fragment() {
 
     private var _binding: PaymentsPageBinding? = null
     private val binding get() = _binding!!
-//    private val paymentsRepository: PaymentsRepository?
-//        get() = (activity?.applicationContext as? MyApp)?.paymentsRepository
+    private val paymentsRepository = MyApp.getInstance().paymentsRepository
 
     private lateinit var listPaymentsViewModel: ListPaymentsViewModel
+    private lateinit var adapter: PaymentsRecyclerAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,16 +42,25 @@ class PaymentPageFragment : Fragment() {
             fragmentTransaction.replace(R.id.fragment_container, LoginFragment())
             fragmentTransaction.commit()
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
+        binding.paymentsRecyclerView.setHasFixedSize(true)
+        binding.paymentsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        adapter = PaymentsRecyclerAdapter(listOf())
+        binding.paymentsRecyclerView.adapter = adapter
 
         getPayments()
     }
 
     fun getPayments() {
         listPaymentsViewModel.getPaymentsList()
+
+        listPaymentsViewModel.getStatus().observe(viewLifecycleOwner, Observer {value ->
+            if (value == "true") {
+                adapter.setListening(paymentsRepository.getPaymentsList().response)
+            }
+
+        })
     }
 
     override fun onDestroyView() {

@@ -1,6 +1,7 @@
 package com.example.paymentapp.view.viewModel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,14 +20,23 @@ class ListPaymentsViewModel : ViewModel() {
     fun getPaymentsList() {
 
         apiService = Common.apiService
-        paymentsContent.value = paymentsRepository.getToken()
+        val token = paymentsRepository.getToken()
 
         viewModelScope.launch {
             try {
-                apiService.getPayments(paymentsContent.value)
+                val resp = apiService.getPayments(token)
+
+                paymentsRepository.setPaymentsList(resp)
+
+                paymentsContent.value = resp.success
+
             } catch (e: Exception) {
                 Log.e("TAG", "Exception after request -> ${e.localizedMessage}")
             }
         }
+    }
+
+    fun getStatus() : LiveData<String?> {
+        return paymentsContent
     }
 }

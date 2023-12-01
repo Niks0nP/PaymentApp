@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -44,16 +45,15 @@ class LoginFragment: Fragment() {
             sendPostRequest()
 
 //            Если не пройдена авторизация, не переходить на другой Fragment
-            viewModel.getResponse().observe(viewLifecycleOwner, Observer { value ->
-                if (value != null){
-//                    println("Token: ${value}")
+            viewModel.getStatus().observe(viewLifecycleOwner, Observer { value ->
+                if (value == "true"){
+
                     val fragmentTransaction = parentFragmentManager.beginTransaction()
                     fragmentTransaction.replace(R.id.fragment_container, PaymentPageFragment())
                     fragmentTransaction.commit()
 
-//                    viewModel.getPaymentsList()
                 }else {
-                    // какая то реализация
+                    Toast.makeText(context, "Wrong password", Toast.LENGTH_SHORT).show()
                 }
             })
         }

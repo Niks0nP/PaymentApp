@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class MyViewModel() : ViewModel() {
 
     private lateinit var apiService: ApiService
-    private val tokenContent = MutableLiveData<String?>()
+    private val successStatus = MutableLiveData<String>()
 
     private val paymentsRepository = MyApp.getInstance().paymentsRepository
 
@@ -31,32 +31,21 @@ class MyViewModel() : ViewModel() {
 
         viewModelScope.launch {
             try {
-                apiService.login(loginClient)
                 val resp = apiService.login(loginClient)
-                val response = resp.response.token
-
+                val response = resp.response?.token
                 paymentsRepository.setToken(response)
-                tokenContent.value = paymentsRepository.getToken()
+
+                val status = resp.success
+                paymentsRepository.setStatus(status)
+                successStatus.value = paymentsRepository.getStatus()
+
             } catch (e: Exception) {
                 Log.e("TAG", "Exception after request -> ${e.localizedMessage}")
             }
         }
     }
 
-    fun getResponse(): LiveData<String?> {
-        return tokenContent
+    fun getStatus(): LiveData<String?> {
+        return successStatus
     }
-
-//    fun getPaymentsList() {
-//
-//        apiService = Common.apiService
-//
-//        viewModelScope.launch {
-//            try {
-//                apiService.getPayments(tokenContent.value)
-//            } catch (e: Exception) {
-//                Log.e("TAG", "Exception after request -> ${e.localizedMessage}")
-//            }
-//        }
-//    }
 }

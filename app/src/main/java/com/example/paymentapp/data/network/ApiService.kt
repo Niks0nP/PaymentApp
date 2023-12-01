@@ -2,9 +2,7 @@ package com.example.paymentapp.data.network
 
 import com.example.paymentapp.data.model.AnswerServer
 import com.example.paymentapp.data.model.LoginRequest
-import com.example.paymentapp.data.model.PaymentModel
 import com.example.paymentapp.data.model.ResponsePayments
-import com.example.paymentapp.data.model.TokenResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
