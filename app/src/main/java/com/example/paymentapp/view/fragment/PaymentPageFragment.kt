@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.paymentapp.R
 import com.example.paymentapp.databinding.PaymentsPageBinding
-import com.example.paymentapp.view.MyApp
 import com.example.paymentapp.view.adapter.PaymentsRecyclerAdapter
 import com.example.paymentapp.view.viewModel.ListPaymentsViewModel
 
