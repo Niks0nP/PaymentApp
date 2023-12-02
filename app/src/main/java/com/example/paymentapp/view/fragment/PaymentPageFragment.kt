@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +20,6 @@ class PaymentPageFragment : Fragment() {
 
     private var _binding: PaymentsPageBinding? = null
     private val binding get() = _binding!!
-    private val paymentsRepository = MyApp.getInstance().paymentsRepository
 
     private lateinit var listPaymentsViewModel: ListPaymentsViewModel
     private lateinit var adapter: PaymentsRecyclerAdapter
@@ -57,8 +57,9 @@ class PaymentPageFragment : Fragment() {
 
         listPaymentsViewModel.getStatus().observe(viewLifecycleOwner, Observer {value ->
             if (value == "true") {
-                adapter.setListening(paymentsRepository.getPaymentsList().response)
-            }
+                adapter.setListening(listPaymentsViewModel.getList())
+            } else
+                Toast.makeText(context, "Exception with token", Toast.LENGTH_SHORT).show()
 
         })
     }

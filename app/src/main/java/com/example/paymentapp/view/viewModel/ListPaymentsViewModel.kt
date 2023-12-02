@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.paymentapp.data.model.ResponseList
 import com.example.paymentapp.data.network.ApiService
 import com.example.paymentapp.data.network.common.Common
 import com.example.paymentapp.view.MyApp
@@ -38,5 +39,9 @@ class ListPaymentsViewModel : ViewModel() {
 
     fun getStatus() : LiveData<String?> {
         return paymentsContent
+    }
+
+    fun getList() : List<ResponseList> {
+        return paymentsRepository.getPaymentsList().response
     }
 }

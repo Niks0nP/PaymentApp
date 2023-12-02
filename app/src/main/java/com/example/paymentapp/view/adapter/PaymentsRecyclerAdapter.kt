@@ -1,5 +1,6 @@
 package com.example.paymentapp.view.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,13 +30,31 @@ class PaymentsRecyclerAdapter(private var paymentsList: List<ResponseList>) :
         return PaymentsRecyclerHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PaymentsRecyclerHolder, position: Int) {
         val list = paymentsList[position]
 
         with(holder) {
             titleText.text = list.title
-            amountText.text = "Amount: ${list.amount}"
-            createdText.text = "Created: ${list.created}"
+
+            when (list.amount) {
+                "" -> {
+                    amountText.setText(R.string.amount_null_string)
+                }
+                null -> {
+                    amountText.setText(R.string.amount_no_value)
+                }
+                else -> amountText.text = "Amount: ${list.amount}"
+            }
+            when (list.created) {
+                "" -> {
+                    createdText.setText(R.string.created_null_string)
+                }
+                null -> {
+                    createdText.setText(R.string.created_no_value)
+                }
+                else -> createdText.text = "Created: ${list.created}"
+            }
         }
     }
 

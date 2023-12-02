@@ -4,4 +4,8 @@
     <string name="password">Password</string>
     <string name="button_text">Log In</string>
     <string name="button_back">Back</string>
+    <string name="amount_null_string">Amount: empty String</string>
+    <string name="amount_no_value">Amount: no value</string>
+    <string name="created_no_value">Created: no value</string>
+    <string name="created_null_string">Created: empty String</string>
 </resources>
